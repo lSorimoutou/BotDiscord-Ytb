@@ -26,8 +26,18 @@ bot.on('message', message => {
                 if(response.status === 200){
                     let data = response.data["parse"];
                     let $ = cheerio.load(data.text["*"]);
+                    let text = [];
                     message.channel.send("**" + data.title + "**");
-                    message.channel.send($(".mw-parser-output > p:nth-child(4)").text());  
+                    $(".mw-parser-output > p").each(function(i, elem) {
+                        text[i] = $(this).text();
+                      });
+                      //on enlève tous les '\n' du tableau
+                      while(text.indexOf("\n") != -1){
+                          const index_val_erase = text.indexOf("\n");
+                          text.splice(index_val_erase, index_val_erase + 1);
+                      }
+                    message.channel.send(text[0]);
+                    
                 }
             }, () => {
                 message.channel.send("Je n'ai pas trouvé d'article wikipedia pour votre mot ! :cry:");
@@ -36,4 +46,4 @@ bot.on('message', message => {
     }
 });
 
-bot.login('tokens');
+bot.login('Njk2MzU3MDY0OTg0NzU2Mjg2.XonlmQ.vlCJ5_mvovyNfuPoVmIh5pddBic');
